@@ -6,7 +6,7 @@
 Примеры:
 java -jar CountDocs.jar "/src/test/resources/testData/",
 java -jar CountDocs.jar "C:/Users/cnk-1/IdeaProjects/CountDocs/src/test/resources/testData/",
-java -jar CountDocs.jar "/home/grigoriy/cnk-1/IdeaProjects/CountDocs/src/test/resources/testData/"
+java -jar CountDocs.jar "/home/grigoriy/IdeaProjects/CountDocs/src/test/resources/testData/"
 
 2) 
 1. Запуск jar файла .
@@ -16,7 +16,7 @@ java -jar CountDocs.jar "/home/grigoriy/cnk-1/IdeaProjects/CountDocs/src/test/re
    Content-Type: text/plain
    Content-Length: 66
 
-C:/Users/cnk-1/IdeaProjects/CountDocs/src/test/resources/testData/
+/src/test/resources/testData/
 
 При осуществлении данных действий должен появиться результат в виде:
 Documents: 10
