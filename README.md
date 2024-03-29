@@ -36,14 +36,14 @@ Content-Length: 66<br/><br/>
 
 
 
-При осуществлении данных действий должен появиться результат в виде:
+При осуществлении данных действий должен появиться результат в виде:<br/><br/>
 Documents: 10<br/>
 Pages: 13<br/>
 
 
 Данная программа протестированна в ОS : Linux, Windows.<br/>
-Java version: java 17<br/>
-стек: Spring boot, Spring web<br/>
-библиотеки: itextpdf(обработка pdf файлов),  poi,commons-io,poi-ooxml(обработка docx файлов)<br/>
-сборка: maven<br/>
-тестирование: Junit<br/>
+<b>Java version:</b> java 17<br/>
+<b>стек:</b> Spring boot, Spring web<br/>
+<b>библиотеки:</b> itextpdf(обработка pdf файлов),  poi,commons-io,poi-ooxml(обработка docx файлов)<br/>
+<b>сборка:</b> maven<br/>
+<b>тестирование:</b> Junit<br/>
