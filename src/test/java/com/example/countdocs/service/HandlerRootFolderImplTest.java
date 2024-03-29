@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
+import java.nio.file.FileSystems;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -53,8 +54,11 @@ class HandlerRootFolderImplTest {
     }
     @Test
     @DisplayName("Проверка поиска папки по абсолютному адресу.")
-    void testCountDocsFromAbsolutePath(@Value("${test.absolute.path}") String path, @Value("${test.count.docs}") int countDocs) throws IOException {
-        int countDocsFromService  = handler.getDataFromPath(path).get(numberDocs);
+    void testCountDocsFromAbsolutePath(@Value("${test.path}") String path, @Value("${test.count.docs}") int countDocs) throws IOException {
+        System.out.println(path);
+        String homePath = FileSystems.getDefault().getPath("").toAbsolutePath().toString();
+        System.out.println( homePath);
+        int countDocsFromService  = handler.getDataFromPath(homePath+path).get(numberDocs);
         assertEquals(countDocs,countDocsFromService);
     }
 
