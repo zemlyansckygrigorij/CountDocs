@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -64,9 +65,18 @@ public class HandlerRootFolderImpl implements HandlerRootFolder{
 
     private Path getPathByOS(String pathS){
         String os = System.getProperty("os.name");
+        String currentPath = FileSystems.getDefault().getPath("").toAbsolutePath().toString().replaceAll("\\\\","/");
+        System.out.println("currentPath - "+currentPath);
+        System.out.println("Path - "+currentPath+"/"+ pathS.trim().replaceAll(currentPath,""));
+        return Paths.get(currentPath+"/"+ pathS.trim().replaceAll(currentPath,""));
+        /*
         return switch(os){
-            case("Windows 10")->  Paths.get(pathS.trim().replaceAll("\t", "/"));
+            case("Windows 10")->  Paths.get(currentPath+"/"+ pathS.trim().replaceAll(currentPath,""));
+            case("Linux")-> {
+            String currentPath = FileSystems.getDefault().getPath("").toAbsolutePath().toString();
+            yield Paths.get(currentPath+"/"+ pathS.trim().replaceAll(currentPath,"").replaceAll("\\\\","/"));
+            }
             default -> Paths.get(pathS);
-        };
+        };*/
     }
 }
