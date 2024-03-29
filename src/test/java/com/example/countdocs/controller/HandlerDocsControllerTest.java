@@ -10,7 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
+import java.nio.file.FileSystems;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -35,8 +35,9 @@ class HandlerDocsControllerTest {
     }
     @Test
     @DisplayName(" Проверка получения web-страницы содержащей информацию о документах в тестовой папке. По абсолютному пути.")
-    void testAbsolutePath(@Value("${test.absolute.path}") String path) throws Exception{
-        assertEquals(getInfoAboutFilesByPath(path),info);
+    void testAbsolutePath(@Value("${test.path}") String path) throws Exception{
+        String homePath = FileSystems.getDefault().getPath("").toAbsolutePath().toString();
+        assertEquals(getInfoAboutFilesByPath(homePath+path),info);
     }
     @Test
     @DisplayName(" Проверка получения web-страницы содержащей информацию о документах в тестовой папке. По относительному пути с двойным слэшем.")
