@@ -33,7 +33,7 @@ public class HandlerRootFolderImpl implements HandlerRootFolder{
     @Override
     public List<Integer> getDataFromPath(String pathS) throws IOException {
         List<Integer> listData = new ArrayList<>();
-        handlerDocsFromPath(getPathByOS(pathS));
+        handlerDocsFromPath(getPath(pathS));
         listData.add(countDocs);
         listData.add(countPages);
         countDocs = 0;
@@ -63,20 +63,10 @@ public class HandlerRootFolderImpl implements HandlerRootFolder{
         }
     }
 
-    private Path getPathByOS(String pathS){
-        String os = System.getProperty("os.name");
-        String currentPath = FileSystems.getDefault().getPath("").toAbsolutePath().toString().replaceAll("\\\\","/");
-        System.out.println("currentPath - "+currentPath);
-        System.out.println("Path - "+currentPath+"/"+ pathS.trim().replaceAll(currentPath,""));
-        return Paths.get(currentPath+"/"+ pathS.trim().replaceAll(currentPath,""));
-        /*
-        return switch(os){
-            case("Windows 10")->  Paths.get(currentPath+"/"+ pathS.trim().replaceAll(currentPath,""));
-            case("Linux")-> {
-            String currentPath = FileSystems.getDefault().getPath("").toAbsolutePath().toString();
-            yield Paths.get(currentPath+"/"+ pathS.trim().replaceAll(currentPath,"").replaceAll("\\\\","/"));
-            }
-            default -> Paths.get(pathS);
-        };*/
+    private Path getPath(String pathS){
+        String homePath = FileSystems.getDefault().getPath("").toAbsolutePath().toString().replaceAll("\\\\","/");
+        String path = pathS.replaceAll("\\\\","/");
+        if(path.contains(homePath))  return Paths.get(path);
+        return Paths.get(homePath +"/"+ path);
     }
 }
