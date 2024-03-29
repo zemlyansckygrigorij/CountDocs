@@ -25,30 +25,34 @@ class HandlerDocsControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-
     @Value("${test.info}")
     private String info;
+
     @Test
     @DisplayName(" Проверка получения web-страницы содержащей информацию о документах в тестовой папке. По относительному пути.")
     void testPath(@Value("${test.path}") String path) throws Exception{
         assertEquals(getInfoAboutFilesByPath(path),info);
     }
+
     @Test
     @DisplayName(" Проверка получения web-страницы содержащей информацию о документах в тестовой папке. По абсолютному пути.")
     void testAbsolutePath(@Value("${test.path}") String path) throws Exception{
         String homePath = FileSystems.getDefault().getPath("").toAbsolutePath().toString();
         assertEquals(getInfoAboutFilesByPath(homePath+path),info);
     }
+
     @Test
     @DisplayName(" Проверка получения web-страницы содержащей информацию о документах в тестовой папке. По относительному пути с двойным слэшем.")
     void testPathWithDoubleSlash(@Value("${path.double.slash}") String path) throws Exception{
         assertEquals(getInfoAboutFilesByPath(path),info);
     }
+
     @Test
     @DisplayName(" Проверка получения web-страницы содержащей информацию о документах в тестовой папке. По неверному пути.")
     void testWrongPath(@Value("${test.wrong.path}") String path, @Value("${wrong.path.info}") String info) throws Exception{
         assertEquals(getInfoAboutFilesByPath(path),info);
     }
+
     private String getInfoAboutFilesByPath(String path) throws Exception {
           MvcResult result =  mockMvc.perform(MockMvcRequestBuilders
                         .post("/")
