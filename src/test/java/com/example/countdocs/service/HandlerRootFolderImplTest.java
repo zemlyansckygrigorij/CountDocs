@@ -33,6 +33,7 @@ class HandlerRootFolderImplTest {
         int countDocsFromService = handler.getDataFromPath(path).get(numberDocs);
         assertEquals(countDocs,countDocsFromService);
     }
+
     @Test
     @DisplayName(" Проверка получения количества страниц из документов тестовой папки.")
     void testCountPagesFromPath(@Value("${test.count.pages}") int count) throws IOException {
@@ -46,18 +47,18 @@ class HandlerRootFolderImplTest {
         int countDocsFromService = handler.getDataFromPath(pathDoubleSlash).get(numberDocs);
         assertEquals(countDocs,countDocsFromService);
     }
+
     @Test
     @DisplayName("Проверка поиска папки по неправильному адресу.")
     void testCheckWrongPath(@Value("${test.wrong.path}") String pathWrong, @Value("${wrong.path.docs}") int count) throws IOException {
         int countDocsFromService = handler.getDataFromPath(pathWrong).get(numberDocs);
         assertEquals(count,countDocsFromService);
     }
+
     @Test
     @DisplayName("Проверка поиска папки по абсолютному адресу.")
     void testCountDocsFromAbsolutePath(@Value("${test.path}") String path, @Value("${test.count.docs}") int countDocs) throws IOException {
-        System.out.println(path);
         String homePath = FileSystems.getDefault().getPath("").toAbsolutePath().toString();
-        System.out.println( homePath);
         int countDocsFromService  = handler.getDataFromPath(homePath+path).get(numberDocs);
         assertEquals(countDocs,countDocsFromService);
     }
