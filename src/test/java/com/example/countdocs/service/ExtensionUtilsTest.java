@@ -23,7 +23,7 @@ class ExtensionUtilsTest {
     @Test
     @DisplayName(" Проверка получения количества страниц из pdf документа.")
     void getCountPagesFromPDF(@Value("${test.path.pdf}") String path, @Value("${pages.count.pdf}") int countDocs) throws IOException {
-       int pagesCount =  getCountPagesFromDocument(new File(path));
+        int pagesCount =  getCountPagesFromDocument(new File(path));
         assertEquals(countDocs,pagesCount);
     }
 
