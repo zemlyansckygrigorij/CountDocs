@@ -1,16 +1,12 @@
 package com.example.countdocs.service;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfReader;
-
+import com.itextpdf.text.*;
 import java.io.*;
+import java.util.Optional;
 
+import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -29,58 +25,61 @@ public class ExtensionUtils {
     private float marginTop;
     @Value("${margin.bottom}")
     private float marginBottom;
-    @Value("${path.temp}")
-    private String pathTemp;
-    public int getCountPagesFromDocument(File file) throws IOException {
-        String extension = getExtensionByApacheCommonLib(file.getName());
-        return switch (extension) {
-            case "pdf" -> getCountPagesFromPDF(file);
-            case "docx" -> getCountPagesFromDOCX(file);
-            default -> 0;
-        };
-    }
 
-    private int getCountPagesFromPDF(File file) throws IOException {
-        PdfReader reader = new PdfReader(file.getPath());
-        return reader.getNumberOfPages();
+    private final String pathTemp;
+    public ExtensionUtils(@Value("${path.temp}")  String pathTemp){
+        this.pathTemp= pathTemp;
     }
+    public int getCountPagesFromTempDocument(File file) throws IOException{
+        int result = 0;
+        if(getExtensionByApacheCommonLib(file.getName()).equals("pdf")){
+            PdfReader reader = new PdfReader(file.getPath());
+            result = reader.getNumberOfPages();
+            reader.close();
+            return result;
+        }
 
-    private int getCountPagesFromDOCX(File file) throws IOException {
-        FileInputStream fis = new FileInputStream(file.getPath());
-        XWPFDocument document = new XWPFDocument(fis);
-        return document.getProperties().getExtendedProperties().getUnderlyingProperties().getPages();
-    }
-
-    private String getExtensionByApacheCommonLib(String filename) {
-        return FilenameUtils.getExtension(filename);
-    }
-
-    public void convertToPDFInTempFolder(File file) throws IOException {
-        BufferedReader input = null;
         Document output = null;
+        PdfWriter writer = null;
 
-        try {
-            input =
-                    new BufferedReader (new FileReader( file));
+        try(
+                BufferedReader input = new BufferedReader(new FileReader(file))
+        ) {
+            String fileName = pathTemp + file.getName().replace(getExtensionByApacheCommonLib(file.getName()), "") + "pdf";
+            output = new Document(PageSize.LETTER, marginLeft, marginReft, marginTop, marginBottom);
+            writer = PdfWriter.getInstance(output, new FileOutputStream(fileName));
+            output.open();
+
 
             // letter 8.5x11
             //    see com.lowagie.text.PageSize for a complete list of page-size constants.
-            output = new Document(PageSize.LETTER, marginLeft, marginReft, marginTop, marginBottom);
-            PdfWriter.getInstance(output, new FileOutputStream (pathTemp+file.getName()+".pdf"));
-            output.open();
+
             output.addSubject(file.getPath());
 
-            String line = "";
-            while(null != (line = input.readLine())) {
+            String line ;
+            while (null != (line = input.readLine())) {
                 Paragraph p = new Paragraph(line);
                 p.setAlignment(Element.ALIGN_JUSTIFIED);
                 output.add(p);
             }
+            result = writer.getPageNumber();
             output.close();
             input.close();
+            writer.close();
+            File fileTemp = new File(fileName);
+            fileTemp.delete();
+        }catch (DocumentException ex){
+            ex.printStackTrace();
+        }finally{
+            assert output != null;
+            Optional.of(output).orElseThrow().close();
+            assert writer != null;
+            Optional.of(writer).orElseThrow().close();
         }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        return result;
+    }
+
+    public String getExtensionByApacheCommonLib(String filename) {
+        return FilenameUtils.getExtension(filename);
     }
 }
