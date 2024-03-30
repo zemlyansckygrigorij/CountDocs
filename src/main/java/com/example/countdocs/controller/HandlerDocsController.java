@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import java.io.IOException;
 
 /**
  * @author Grigoriy Zemlyanskiy
@@ -21,10 +20,6 @@ public class HandlerDocsController {
 
     @PostMapping()
     public String getInfoAboutFilesByPath(@RequestBody String path) {
-        try{
-            return handler.getInfoAboutFilesByPath(path);
-        }catch(IOException ex){
-            return "Неверно введеные данные.";
-        }
+       return handler.getInfoAboutFilesByPath(path);
     }
 }
