@@ -1,5 +1,7 @@
 package com.example.countdocs.service;
 
+import com.itextpdf.text.DocumentException;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -9,6 +11,6 @@ import java.util.List;
  * interface HandlerRootFolder for handle root folder
  * */
 public interface HandlerRootFolder {
-    List<Integer> getDataFromPath(String path) throws IOException;
-    String getInfoAboutFilesByPath(String path) throws IOException;
+    List<Integer> getDataFromPath(String path) throws IOException, DocumentException;
+    String getInfoAboutFilesByPath(String path);
 }
