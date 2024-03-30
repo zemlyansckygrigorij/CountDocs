@@ -1,17 +1,15 @@
 package com.example.countdocs.service;
 
+import com.itextpdf.text.DocumentException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import java.io.*;
 import java.nio.file.FileSystems;
-
 import static org.junit.jupiter.api.Assertions.*;
-import java.awt.print.Book;
+
 /**
  * @author Grigoriy Zemlyanskiy
  * @version 1.0
@@ -30,35 +28,35 @@ class HandlerRootFolderImplTest {
 
     @Test
     @DisplayName(" Проверка получения количества документов из тестовой папки.")
-    void testCountDocsFromPath(@Value("${test.count.docs}") int countDocs) throws IOException {
+    void testCountDocsFromPath(@Value("${test.count.docs}") int countDocs) throws IOException, DocumentException {
         int countDocsFromService = handler.getDataFromPath(path).get(numberDocs);
         assertEquals(countDocs,countDocsFromService);
     }
 
     @Test
     @DisplayName(" Проверка получения количества страниц из документов тестовой папки.")
-    void testCountPagesFromPath(@Value("${test.count.pages}") int count) throws IOException {
+    void testCountPagesFromPath(@Value("${test.count.pages}") int count) throws IOException, DocumentException {
         int countPages = handler.getDataFromPath(path).get(numberPages);
         assertEquals(count,countPages);
     }
 
     @Test
     @DisplayName("Проверка поиска папки по адресу с двойным слешем.")
-    void testCheckPathWithDoubleSlash(@Value("${path.double.slash}") String pathDoubleSlash, @Value("${test.count.docs}") int countDocs) throws IOException {
+    void testCheckPathWithDoubleSlash(@Value("${path.double.slash}") String pathDoubleSlash, @Value("${test.count.docs}") int countDocs) throws IOException, DocumentException {
         int countDocsFromService = handler.getDataFromPath(pathDoubleSlash).get(numberDocs);
         assertEquals(countDocs,countDocsFromService);
     }
 
     @Test
     @DisplayName("Проверка поиска папки по неправильному адресу.")
-    void testCheckWrongPath(@Value("${test.wrong.path}") String pathWrong, @Value("${wrong.path.docs}") int count) throws IOException {
+    void testCheckWrongPath(@Value("${test.wrong.path}") String pathWrong, @Value("${wrong.path.docs}") int count) throws IOException, DocumentException {
         int countDocsFromService = handler.getDataFromPath(pathWrong).get(numberDocs);
         assertEquals(count,countDocsFromService);
     }
 
     @Test
     @DisplayName("Проверка поиска папки по абсолютному адресу.")
-    void testCountDocsFromAbsolutePath(@Value("${test.path}") String path, @Value("${test.count.docs}") int countDocs) throws IOException {
+    void testCountDocsFromAbsolutePath(@Value("${test.path}") String path, @Value("${test.count.docs}") int countDocs) throws IOException, DocumentException {
         String homePath = FileSystems.getDefault().getPath("").toAbsolutePath().toString();
         int countDocsFromService  = handler.getDataFromPath(homePath+path).get(numberDocs);
         assertEquals(countDocs,countDocsFromService);
@@ -66,7 +64,7 @@ class HandlerRootFolderImplTest {
 
     @Test
     @DisplayName("Проверка получения текстовой информации о файлах в тестовой папке.")
-    void getInfoAboutFiles(@Value("${test.info}") String info) throws IOException {
+    void getInfoAboutFiles(@Value("${test.info}") String info) {
         String response = handler.getInfoAboutFilesByPath(path);
         assertEquals(response,info);
     }
