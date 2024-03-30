@@ -5,7 +5,6 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import java.io.IOException;
 
 /**
  * @author Grigoriy Zemlyanskiy
@@ -21,7 +20,7 @@ public class CountDocsApplication {
     public void init() {
         CountDocsApplication.handlerStatic = handler;
     }
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args){
         SpringApplication.run(CountDocsApplication.class, args);
 
         if(args.length>0){
