@@ -68,21 +68,4 @@ class HandlerRootFolderImplTest {
         String response = handler.getInfoAboutFilesByPath(path);
         assertEquals(response,info);
     }
-
-    @Test
-    @DisplayName("1")
-    void getFiles(@Value("${test.path.txt}") String path) throws IOException {
-        FileInputStream fileIn =
-                new FileInputStream(path);
-        FileOutputStream fileOut =
-                new FileOutputStream(
-                        "src/test/resources/testData/2.docx");
-
-        while (fileIn.available() > 0) {
-            int oneByte = fileIn.read();
-            fileOut.write(oneByte);
-        }
-        fileIn.close();
-        fileOut.close();
-    }
 }

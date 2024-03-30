@@ -26,8 +26,6 @@ class ExtensionUtilsTest {
         assertEquals(countDocs,pagesCount);
     }
 
-
-
     @Test
     @DisplayName(" Проверка получения количества страниц из txt документа.")
     void getCountPagesFromTXT(@Value("${test.path.txt}") String path, @Value("${pages.count.txt}") int countDocs) throws IOException{
@@ -44,5 +42,4 @@ class ExtensionUtilsTest {
     int getCountPagesFromDocument(File file) throws IOException {
         return utils.getCountPagesFromTempDocument(file);
     }
-
 }
