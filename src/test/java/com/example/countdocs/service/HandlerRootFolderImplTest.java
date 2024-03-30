@@ -4,13 +4,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.FileSystems;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+import java.awt.print.Book;
 /**
  * @author Grigoriy Zemlyanskiy
  * @version 1.0
@@ -68,5 +69,22 @@ class HandlerRootFolderImplTest {
     void getInfoAboutFiles(@Value("${test.info}") String info) throws IOException {
         String response = handler.getInfoAboutFilesByPath(path);
         assertEquals(response,info);
+    }
+
+    @Test
+    @DisplayName("1")
+    void getFiles(@Value("${test.path.txt}") String path) throws IOException {
+        FileInputStream fileIn =
+                new FileInputStream(path);
+        FileOutputStream fileOut =
+                new FileOutputStream(
+                        "src/test/resources/testData/2.docx");
+
+        while (fileIn.available() > 0) {
+            int oneByte = fileIn.read();
+            fileOut.write(oneByte);
+        }
+        fileIn.close();
+        fileOut.close();
     }
 }
