@@ -1,5 +1,6 @@
 package com.example.countdocs.service;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -8,10 +9,7 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 
 /**
@@ -29,7 +27,11 @@ public class HandlerRootFolderImpl implements HandlerRootFolder{
     private int numberPages;
     private int countDocs = 0;
     private int countPages = 0;
+    private final Set<String> extensions;
 
+    public HandlerRootFolderImpl(@Value("${kind.docs}")  String extensions){
+        this.extensions = new HashSet<>(Arrays.asList(extensions.split(";")));
+    }
     @Override
     public List<Integer> getDataFromPath(String pathS) throws IOException {
         List<Integer> listData = new ArrayList<>();
@@ -42,10 +44,16 @@ public class HandlerRootFolderImpl implements HandlerRootFolder{
     }
 
     @Override
-    public String getInfoAboutFilesByPath(String path) throws IOException {
-        List<Integer> listData = getDataFromPath(path);
-        return "Documents: "+ listData.get(numberDocs)+"\n" +
-                "Pages: "+ listData.get(numberPages)+"\n";
+    public String getInfoAboutFilesByPath(String path) {
+        try{
+            List<Integer> listData = getDataFromPath(path);
+            return "Documents: "+ listData.get(numberDocs)+"\n" +
+                    "Pages: "+ listData.get(numberPages)+"\n";
+        }catch(IOException ex){
+            return "Невозможно обработать данные.";
+        } catch (Exception e) {
+            return "Проверьте введеные данные";
+        }
     }
 
     private void handlerDocsFromPath(Path path) throws IOException {
@@ -57,7 +65,10 @@ public class HandlerRootFolderImpl implements HandlerRootFolder{
                 }
                 else{
                     countDocs++;
-                    countPages = countPages + utils.getCountPagesFromDocument(item);
+                    String extension = utils.getExtensionByApacheCommonLib(item.getName());
+                    if(extensions.contains(extension)) {
+                        countPages = countPages + utils.getCountPagesFromDocument(item) ;
+                    }
                 }
             }
         }
