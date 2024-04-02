@@ -58,7 +58,7 @@ public class HandlerRootFolderImpl implements HandlerRootFolder{
         }
     }
 
-    private void handlerDocsFromPath(Path path) throws IOException {
+    private void handlerDocsFromPath(Path path) throws IOException, DocumentException {
         File dir = new File(path.toString());
         if(dir.isDirectory()&& Optional.of(dir.listFiles()).isPresent()) {
             for(File item : Objects.requireNonNull(dir.listFiles())){
@@ -69,7 +69,7 @@ public class HandlerRootFolderImpl implements HandlerRootFolder{
                     countDocs++;
                     String extension = utils.getExtensionByApacheCommonLib(item.getName());
                     if(extensions.contains(extension)){
-                       countPages = countPages + utils.getCountPagesFromTempDocument(item);
+                       countPages = countPages + utils.getCountPagesByDocument(item);
                     }
                 }
             }
